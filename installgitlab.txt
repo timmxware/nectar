@@ -1,0 +1,41 @@
+install gitlab
+
+sudo gitlab-ctl stop
+sudo apt-get remove nginx
+
+sudo nano /etc/gitlab/gitlab.rb
+
+
+external_url 'http://preview.gitlab.local'
+gitlab_workhorse['enable'] = true
+gitlab_workhorse['listen_network'] = "tcp"
+gitlab_workhorse['listen_addr'] = "127.0.0.1:8181"
+web_server['external_users'] = ['www-data']
+nginx['enable'] = false
+
+
+
+install apache
+
+<VirtualHost *:80>
+  ServerName preview.gitlab.local
+  ProxyPreserveHost On
+  ServerSignature Off
+    RewriteEngine on
+ DocumentRoot /opt/gitlab/embedded/service/gitlab-rails/public
+#Alias "/apache" "/var/www/apache"
+  <Location />
+    Order deny,allow
+    Allow from all    Options FollowSymLinks
+    AllowOverride All
+    Require all granted
+    ProxyPass http://127.0.0.1:8080/
+    ProxyPassReverse http://127.0.0.1:8080
+    ProxyPassReverse http://preview.gitlab.local/
+ </Location>
+  RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_FILENAME} !-f
+  RewriteRule .* http://127.0.0.1:8080%{REQUEST_URI} [P,QSA]
+</VirtualHost>
+
+
+sudo gitlab-ctl reconfigure

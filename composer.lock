@@ -1,0 +1,164 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "0e21f0f87eae1a99c5eeeade0c4cca55",
+    "content-hash": "3fc694ef3c71f914a9ee52471da43373",
+    "packages": [
+        {
+            "name": "adambrett/shell-wrapper",
+            "version": "0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/adambrett/php-shell-wrapper.git",
+                "reference": "d1fb1a6061cf22a8a7136beeb15de8eeb34b2483"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/adambrett/php-shell-wrapper/zipball/d1fb1a6061cf22a8a7136beeb15de8eeb34b2483",
+                "reference": "d1fb1a6061cf22a8a7136beeb15de8eeb34b2483",
+                "shasum": ""
+            },
+            "require-dev": {
+                "covex-nn/phpcb": "*@dev",
+                "fzaninotto/faker": "*@dev",
+                "mockery/mockery": "*@dev",
+                "pdepend/pdepend": "*@dev",
+                "phploc/phploc": "*@dev",
+                "phpmd/phpmd": "*@dev",
+                "phpunit/phpunit": "*@dev",
+                "sebastian/phpcpd": "*@dev",
+                "squizlabs/php_codesniffer": "*@dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AdamBrett\\ShellWrapper\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BDS-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Adam Brett",
+                    "email": "adam@adambrett.co.uk"
+                }
+            ],
+            "description": "An object oriented wrapper for shell commands",
+            "time": "2016-03-24 14:54:33"
+        },
+        {
+            "name": "components/jquery",
+            "version": "3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/components/jquery.git",
+                "reference": "09a1658378bc1f818856086396ebeab7d0ec2276"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/components/jquery/zipball/09a1658378bc1f818856086396ebeab7d0ec2276",
+                "reference": "09a1658378bc1f818856086396ebeab7d0ec2276",
+                "shasum": ""
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "scripts": [
+                        "jquery.js"
+                    ],
+                    "files": [
+                        "jquery.min.js",
+                        "jquery.min.map"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Resig",
+                    "email": "jeresig@gmail.com"
+                }
+            ],
+            "description": "jQuery JavaScript Library",
+            "homepage": "http://jquery.com",
+            "time": "2016-09-23 06:06:29"
+        },
+        {
+            "name": "twig/twig",
+            "version": "v1.28.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twigphp/Twig.git",
+                "reference": "b22ce0eb070e41f7cba65d78fe216de29726459c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/b22ce0eb070e41f7cba65d78fe216de29726459c",
+                "reference": "b22ce0eb070e41f7cba65d78fe216de29726459c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.7"
+            },
+            "require-dev": {
+                "symfony/debug": "~2.7",
+                "symfony/phpunit-bridge": "~3.2@dev"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.28-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Twig_": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Armin Ronacher",
+                    "email": "armin.ronacher@active-4.com",
+                    "role": "Project Founder"
+                },
+                {
+                    "name": "Twig Team",
+                    "homepage": "http://twig.sensiolabs.org/contributors",
+                    "role": "Contributors"
+                }
+            ],
+            "description": "Twig, the flexible, fast, and secure template language for PHP",
+            "homepage": "http://twig.sensiolabs.org",
+            "keywords": [
+                "templating"
+            ],
+            "time": "2016-11-23 18:41:40"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
