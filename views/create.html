@@ -1,9 +1,9 @@
-<div id="create-form" class="form" >
+<div id="create-form" class="form" style="display:none;">
 <form class="center" action="">
 <h1>Création d'un projet</h1>
 
 
-	{% include 'forms/input.html' with {
+	{% include 'inputs/input.html' with {
 	id: 'projectname',
 	icon: 'book',
 	title: 'Nom du projet',
@@ -11,7 +11,7 @@
 	description: 'Le nom du projet doit être composé de minuscules et de tirets uniquement. Il ne peut pas être modifié après la création.' ,
 	}%}
 
-	{% include 'forms/radios.html' with {
+	{% include 'inputs/radios.html' with {
 	id: 'projecttype',
 	icon: 'cog',
 	title: 'Type de projet',
@@ -21,7 +21,7 @@
 	img: ['html5.svg', 'symfony.svg', 'empty.svg'],
 	}%}
 
-	{% include 'forms/checkbox.html' with {
+	{% include 'inputs/checkbox.html' with {
 	id: 'ishosted',
 	icon: 'server',
 	description: 'Le projet sera déployé sur le serveur.',
@@ -29,7 +29,7 @@
 	title: 'En préprod sur ce serveur',
 	}%}
 
-	{% include 'forms/checkbox.html' with {
+	{% include 'inputs/checkbox.html' with {
 	id: 'isdb',
 	icon: 'database',
 	description: 'Installe MySQL, PHPMyAdmin et une base de données vide.',
@@ -40,7 +40,7 @@
 	<p id="advanced-settings-title" class="important-link">Réglages avancés</p>
 	<section id="advanced-settings" class="is-hidden well" >
 
-	{% include 'forms/input.html' with {
+	{% include 'inputs/input.html' with {
 	id: 'publicfolder',
 	icon: 'folder-open',
 	value: 'web',
@@ -48,7 +48,7 @@
 	description: 'Le dossier public du site.',
 	}%}
 
-	{% include 'forms/select.html' with {
+	{% include 'inputs/select.html' with {
 	id: 'phpver',
 	title: 'Version de PHP',
 	icon: 'server',
@@ -56,7 +56,7 @@
 	options	: ['7','5.6']
 	}%}
 
-	{% include 'forms/input.html' with {
+	{% include 'inputs/input.html' with {
 	id: 'pmaver',
 	icon: 'database',
 	value: '4.6.4',
@@ -64,7 +64,7 @@
 	description: 'Version de PHPMyAdmin',
 	}%}
 
-	{% include 'forms/input.html' with {
+	{% include 'inputs/input.html' with {
 	id: 'defaultdb',
 	icon: 'table',
 	disabled: 'disabled',
@@ -73,7 +73,7 @@
 	}%}
 
 	{% set customIP = '192.168.' ~ random(198) ~ '.' ~ random(98) %}
-	{% include 'forms/input.html' with {
+	{% include 'inputs/input.html' with {
 	id: 'customip',
 	icon: 'globe',
 	value: customIP,
@@ -81,7 +81,7 @@
 	description: "L'adresse IP de développement.",
 	}%}
 
-	{% include 'forms/input.html' with {
+	{% include 'inputs/input.html' with {
 	id: 'timezone',
 	icon: 'clock-o',
 	value: 'Europe/Paris',
@@ -89,7 +89,7 @@
 	description: 'Sélection du fuseau horaire de la machine',
 	}%}
 
-	{% include 'forms/input.html' with {
+	{% include 'inputs/input.html' with {
 	id: 'password',
 	icon: 'lock',
 	value: 'root',
@@ -100,7 +100,7 @@
 	</section>
 
 
-	{% include 'forms/buttons.html' with {
+	{% include 'inputs/buttons.html' with {
 	validlabel: 'Créer le projet',
 	}%}
 

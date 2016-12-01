@@ -1,6 +1,6 @@
-html,
-body {
-	height: 100%;
+html, body {
+    height: 100%;
+  width: 100%;
 }
 
 p,fieldset, label {
@@ -14,6 +14,7 @@ body {
   font-family: 'Lato', sans-serif;
   color: #515151;
 }
+
 
 h1, h2, .h1-like, .h2-like {
   font-family: 'Lato', sans-serif;
@@ -37,10 +38,13 @@ h1, h2, .h1-like, .h2-like {
 }
 .btn {
   width: auto;
-  margin-left:2rem;
   cursor: pointer;
   vertical-align: middle;
 
+}
+
+form.btn {
+  margin-left:2rem;
 }
 
 .btn.valid {
@@ -140,4 +144,33 @@ form {
   width: 75%;
 }
 
+/***************************
+        Login screen
+****************************/
+
+body.login {
+  background: #000;
+}
+
+
+.login-zone  {
+  align-items: center;
+    display: flex;
+
+  height: 100%;
+
+
+}
+.login-zone img {
+  /*margin-top: 5rem;*/
+  margin: 4rem auto;
+  display: block;
+  width: 100%;
+}
+
+.login .btn {
+  margin-top: 3rem;
+  display: block;
+  background: #FFF;
+}
 

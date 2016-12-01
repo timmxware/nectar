@@ -1,0 +1,27 @@
+<table>
+ {% for i,k in repos %}
+<tr>
+<td>{{ attribute(repos, i).name }}</td>
+<td>{{ attribute(repos, i).web_url }}</td>
+<td>{{ attribute(repos, i).ssh_url_to_repo }}</td>
+<td>{{ attribute(repos, i).created_at }}</td>
+</tr>
+ {% endfor %}
+</table>
+
+  <!-- <div id="login-form" class="w50" style="display:none;"> -->
+
+<!--
+<section class="flex-container">
+  <span class="flex-item-center">
+    <p>I am centered</p>
+  </span>
+</section>
+-->
+
+
+<!-- Link to open the modal -->
+
+<!-- <section class="grid test">
+  <div class="push center three-quarters">.push</div>
+</section> -->

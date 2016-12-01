@@ -1,5 +1,6 @@
 <?php
-include "ClientCredentials.php";
+ include "../config.inc.php";
+// Analyse de php.ini
 
 // Initialize the session
 session_start();
@@ -97,18 +98,10 @@ if(isset($responseArray['access_token']))
     $_SESSION['access_token'] = $accessToken;
     $_SESSION['refresh_token'] = $refreshToken;
 
-    // Redirect to the URL that will finally access BingAds data.
     header('Location: ' . $getDataRedirectUriPath);
 }
 else
 {
-   ?>
-    <pre>
-      <?php
-       print_r($_SESSION);
-      ?>
-      </pre>
-     <?php
     $errorDesc = $responseArray['error_description'];
     $errorName = $responseArray['error'];
     printf("<p>OAuth failed Failed: %s - %s</p>", $errorName, $errorDesc);

@@ -1,6 +1,7 @@
 {
     "require": {
         "components/jquery": "3.1.*",
-        "twig/twig": "^1.28"
+        "twig/twig": "^1.28",
+        "tcdent/php-restclient": "^0.1.5"
     }
 }

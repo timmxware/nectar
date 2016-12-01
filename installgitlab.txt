@@ -39,3 +39,16 @@ install apache
 
 
 sudo gitlab-ctl reconfigure
+
+http://requiremind.com/a-most-simple-php-mvc-beginners-tutorial/
+https://www.dev-metal.com/mini-extremely-simple-barebone-php-application/
+
+********** GREENSOCK
+http://codepen.io/MAW/pen/KdmwMb?editors=001
+http://codepen.io/osublake/pen/avbPON?editors=001
+http://pixijs.github.io/pixi-particles-editor/#snow
+http://codepen.io/osublake/pen/f0dc23be2284aa07156244e62ff5dcba/?editors=001
+http://codepen.io/osublake/pen/MyMbRY?editors=0010
+http://codepen.io/SnapToPixels/pen/f62da3152b7cf640633fe734cdd4b184?editors=001
+
+

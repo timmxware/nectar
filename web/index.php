@@ -1,75 +1,92 @@
-<!doctype html>
-<html class="no-js" lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Creator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="assets/css/knacss.css" media="all">
- <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i" rel="stylesheet">   <link rel="stylesheet" href="assets/css/basefields.css" media="all">
-  <link rel="stylesheet" href="assets/css/font-awesome.css" media="all">
-  <link rel="stylesheet" href="assets/css/modal.css" media="all">
-  <link rel="stylesheet" href="assets/css/styles.css" media="all">
-</head>
-<body>
 <?php
 
+//*******************
+//
+// ** Config
+//
+//*******************
+
+require __DIR__ . '/../vendor/autoload.php';
+
+ // Load Twig in dev
+  // TODO : remove options in production
+use twig\twig;
+$loader = new Twig_Loader_Filesystem('../views');
+$twig = new Twig_Environment($loader, array(
+  'cache' => '/dev/shm',
+  'debug' => true));
+
+// Get config file
+include "../config.inc.php";
 
 
- // header('Location: '.$_SERVER['REQUEST_URI']);
-
-
-
-include "ClientCredentials.php";
+//*******************
+//
+// ** Session check
+//
+//*******************
 
 session_start();
 
-if (empty($_SESSION['access_token'])) {
+$httpCode = 401;
 
-// Generate random value for use as the 'state'.  Mitigates
-// cross site request forgery attacks.
-$_SESSION['state'] = rand(0,999999999);
-
-
-// This is the Microsoft authentication service URL used to initiate the OAuth authentication flow
-$authorizationUrlBase = 'http://preview.gitlab.local/oauth/authorize';
-
-// URL parameters used to request an authorization token
-$queryParams = array(
-    'client_id' => $clientId,
-    'redirect_uri' => 'http://localhost/~kursus/git/nectar/web' . $redirectUriPath,
-    'response_type' => 'code',
-    'state' => $_SESSION['state']
-);
-
-// Microsoft Authentication service url and params
-$goToUrl = $authorizationUrlBase . '?' . http_build_query($queryParams);
-?>
-
-<h2>Bing Ads OAuth Demo</h2>
-
-<p>This application would like to manage your Bing Ads data. Click below to login and authorize this application.</p>
-
-<p>When you click OK below, you'll be redirected to the following URI:</p>
-<p><?php echo $goToUrl ?></p>
-
-<input type="button" onClick="return window.location='<?php echo $goToUrl;?>';" value="OK" />
-
-<?php
-
-}
-else {
+if (isset($_SESSION['access_token'])) {
   $accessToken = $_SESSION['access_token'];
-
-  printf("Implement code to retrieve data with access token: %s", $accessToken);
+  $api = new RestClient(['base_url' => $apiUrl]);
+  $result = $api->get("projects", ['access_token' => $accessToken]);
+  $httpCode = $result->info->http_code;
 }
 
- ?>
+//*******************
+//
+// ** List repos
+//
+//*******************
 
-  </body>
-  </html>
+if ($httpCode == 200) {
+  // Display repos
+  $repos = $result->decode_response();
+  echo $twig->render('commons/header.html');
+  echo $twig->render('list.html', array('repos' => $repos));
+  echo $twig->render('commons/footer.html');
+}
+
+//****************
+//
+// ** Login form
+//
+//****************
+
+else {
+ // Mitigates cross site request forgery attacks.
+  $_SESSION['state'] = rand(0,999999999);
+
+  // URL parameters used to request an authorization token
+  $queryParams = array(
+    'client_id' => $clientId,
+    'redirect_uri' => $localUrl . $redirectUriPath,
+    'response_type' => 'code',
+    'state' => $_SESSION['state']);
+
+  // Autohrisation query URL
+  $loginUrl = $authorizeUrl . '?' . http_build_query($queryParams);
+
+  // Display login form
+  echo $twig->render('commons/header.html', array('class' => 'login'));
+  echo $twig->render('login.html', array('url' => $loginUrl));
+  echo $twig->render('commons/footer.html');
+}
 
 
-
+  //require __DIR__ . '/vendor/autoload.php';
+  // use AdamBrett\ShellWrapper\Runners\Exec;
+  // use AdamBrett\ShellWrapper\Command\Builder as CommandBuilder;
+  // $shell = new Exec();
+  // $command = new CommandBuilder('/usr/bin/git');
+  // $command->addSubCommand('init')
+  //    ->addArgument('bare','/home/kursus/websites/git/gitcreator/coco');
+  // $shell->run($command);
+?>
 
 
 
