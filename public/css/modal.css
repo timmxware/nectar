@@ -28,7 +28,8 @@
   vertical-align: middle;
   position: relative;
   z-index: 999;
-  max-width: 50%;
+  width: 90%;
+  max-width: 900px;
   box-sizing: border-box;
   background: #fff;
   padding: 15px 30px;

@@ -1,7 +1,3 @@
-html, body {
-    height: 100%;
-  width: 100%;
-}
 
 p,fieldset, label {
   margin: 0;
@@ -15,12 +11,20 @@ body {
   color: #515151;
 }
 
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5rem 0;
+}
 
 h1, h2, .h1-like, .h2-like {
   font-family: 'Lato', sans-serif;
   font-weight: normal;
   margin: 0;
   padding: 0;
+  display: inline-block;
+
 }
 
 .well {
@@ -40,7 +44,8 @@ h1, h2, .h1-like, .h2-like {
   width: auto;
   cursor: pointer;
   vertical-align: middle;
-
+  -webkit-border-radius: 0.6rem;
+          border-radius: 0.6rem;
 }
 
 form.btn {
@@ -50,6 +55,7 @@ form.btn {
 .btn.valid {
   background: #18c105;
   color: #fff;
+  margin-left: 2rem;
 }
 
 
@@ -141,12 +147,12 @@ form .description {
 
 form {
   padding: 2rem 0;
-  width: 75%;
+  width: 90%;
 }
 
-/***************************
-        Login screen
-****************************/
+/***************************/
+/*      Login screen       */
+/***************************/
 
 body.login {
   background: #000;
@@ -154,23 +160,59 @@ body.login {
 
 
 .login-zone  {
-  align-items: center;
-    display: flex;
-
-  height: 100%;
-
 
 }
+
 .login-zone img {
   /*margin-top: 5rem;*/
-  margin: 4rem auto;
   display: block;
-  width: 100%;
+  margin: 1rem auto;
+  vertical-align:middle;
+  width: 289px;
+  height: 227px;
+  margin-top: 28vh;
 }
 
 .login .btn {
-  margin-top: 3rem;
+  margin: 5rem auto;
+  padding: 1rem 2rem;
   display: block;
-  background: #FFF;
+  background: #000;
+  color: #FFF;
+  border: 1px solid #fff;
 }
 
+
+/***************************/
+/*        List repos       */
+/***************************/
+
+
+
+.list-repos {
+  margin: 3rem auto;
+}
+
+.list-repos table {
+  background: #FFF;
+  margin-top: 3rem;
+}
+
+.list-repos table td {
+  vertical-align: middle;
+}
+
+.title-zone {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn.new-repo {
+  display: inline-block;
+  text-align: center;
+  color: #FFF;
+  font-weight: bold;
+  text-decoration: none;
+  background: #3498db;
+  padding: 1rem 2rem ;
+}

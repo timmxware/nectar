@@ -1,5 +1,5 @@
 <?php
-$localUrl = 'http://localhost/~kursus/git/nectar/web';
+$localUrl = 'http://localhost/~kursus/git/nectar/public';
 $gitlabServer = 'http://preview.gitlab.local';
 
 $clientId = '0f3809ef031737abb7445b491dff6cc8dd5604f33f1210eadf42f679797f2077';
