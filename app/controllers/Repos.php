@@ -5,36 +5,37 @@
  * to the application.
  */
 class Repos extends Controller {
+  /**
+   * The default controller method.
+   *
+   * @return void
+   */
+  public function index() {
 
-/**
- * The default controller method.
- *
- * @return void
- */
-public function index($name = 'alex', $mood = 'normal') {
-        require_once INC_ROOT . '/config.inc.php';
+    $repoModel = $this->model( 'repo' );
+    $reposList = $repoModel->getAll();
 
-        // $user = $this->model('user');
-        // $user->name = $name;
-    $httpCode = 401;
+    if ( isset( $reposList ) ) {
+      $this->view( 'repos/list', ['repos' => $reposList] );
+    }
+    else {
+      header( 'Location: /login' );
+    }
 
-    if (isset($_SESSION['access_token'])) {
-      $accessToken = $_SESSION['access_token'];
-      $api = new RestClient(['base_url' => $apiUrl]);
-      $result = $api->get("projects", ['access_token' => $accessToken]);
-      $httpCode = $result->info->http_code;
   }
 
-  if ($httpCode == 200) {
-          // Display repos
-      $repos = $result->decode_response();
-                  // 'name' => $name->name,
-      $this->view('repos/list', ['repos' => $repos, 'apiUrl' => $apiUrl, 'access_token' => $accessToken ]);
+  public function create() {
+      $this->view( 'repos/create', ['repos' => 'coucou'] );
   }
-  else {
-    header('Location: /login');
-}
 
-
-}
+  private function setUpRepo() {
+    //require __DIR__ . '/vendor/autoload.php';
+    // use AdamBrett\ShellWrapper\Runners\Exec;
+    // use AdamBrett\ShellWrapper\Command\Builder as CommandBuilder;
+    // $shell = new Exec();
+    // $command = new CommandBuilder('/usr/bin/git');
+    // $command->addSubCommand('init')
+    //    ->addArgument('bare','/home/kursus/websites/git/gitcreator/coco');
+    // $shell->run($command);
+  }
 }

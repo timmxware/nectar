@@ -6,7 +6,7 @@
      {% for i,k in value %}
      <div class="radio-img ">
        <input type="radio" name="{{id}}" id="{{value[i]}}" value="{{value[i]}}" {{ i == 0 ? 'checked' : '' }} />
-       <label for="{{value[i]}}"><img class="center" src="assets/img/projects/{{img[i]}}" alt="">{{type[i]}}</label>
+       <label for="{{value[i]}}"><img class="center" src="{{ ASSET_ROOT }}/img/projects/{{img[i]}}" alt="">{{type[i]}}</label>
      </div>
      {% endfor %}
    </div>

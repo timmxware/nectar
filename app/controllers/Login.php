@@ -5,31 +5,19 @@
  * to the application.
  */
 class Login extends Controller {
-/**
- * The default controller method.
- *
- * @return void
- */
-public function index() {
-        require_once INC_ROOT . '/config.inc.php';
+	/**
+	 * The default controller method.
+	 *
+	 * @return void
+	 */
+	public function index() {
 
-   // Mitigates cross site request forgery attacks.
-	$_SESSION['state'] = rand(0,999999999);
+		$tokenModel = $this->model( 'token' );
+		$authUrl = $tokenModel->getOAuthUrl();
 
-  // URL parameters used to request an authorization token
-	$queryParams = array(
-		'client_id' => $clientId,
-		'redirect_uri' => $localUrl . $redirectUriPath,
-		'response_type' => 'code',
-		'state' => $_SESSION['state']);
+		// Display login form
+		$this->view( 'login/index', ['class' => 'login', 'url' => $authUrl]);
 
-  // Autohrisation query URL
-	$loginUrl = $authorizeUrl . '?' . http_build_query($queryParams);
-
-  // Display login form
-
-	$this->view('login/index', ['class' => 'login', 'url' => $loginUrl]);
-
-}
+	}
 
 }
