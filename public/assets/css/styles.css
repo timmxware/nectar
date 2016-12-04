@@ -150,6 +150,7 @@ form .description {
 }
 
 form {
+  background: #FFF;
   padding: 2rem 0;
   width: 90%;
 }
@@ -219,4 +220,9 @@ body.login {
   text-decoration: none;
   background: #3498db;
   padding: 1rem 2rem ;
+}
+
+
+#modal-repo-setup {
+  min-height: 400px;
 }

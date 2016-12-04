@@ -16,7 +16,7 @@ class Login extends Controller {
 		$authUrl = $tokenModel->getOAuthUrl();
 
 		// Display login form
-		$this->view( 'login/index', ['class' => 'login', 'url' => $authUrl]);
+		$this->view( 'login', ['class' => 'login', 'url' => $authUrl]);
 
 	}
 

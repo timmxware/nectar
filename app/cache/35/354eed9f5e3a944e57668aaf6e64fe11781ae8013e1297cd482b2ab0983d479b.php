@@ -1,7 +1,7 @@
 <?php
 
-/* repos/list.html */
-class __TwigTemplate_1558733aed2cf6887c7dd31a6985dbfbbd051b51a7d940614daeac944be5d2ab extends Twig_Template
+/* repo-list.html */
+class __TwigTemplate_87065a69a0d1786a2a8a6fff9323952d4129f50774f439f4da70a1bf7e47e400 extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
@@ -16,14 +16,14 @@ class __TwigTemplate_1558733aed2cf6887c7dd31a6985dbfbbd051b51a7d940614daeac944be
     protected function doDisplay(array $context, array $blocks = array())
     {
         // line 1
-        $this->loadTemplate("blocks/header.html", "repos/list.html", 1)->display($context);
+        $this->loadTemplate("blocks/header.html", "repo-list.html", 1)->display($context);
         // line 2
         echo "
 
 <div class=\"container list-repos\">
 \t<div class=\"title-zone\">
 \t\t<h1>Liste des projets</h1>
-\t\t<a class=\"btn new-repo\" id=\"btn-new-project\" href=\"/repos/create\"  data-effect=\"mfp-3d-unfold\">
+\t\t<a class=\"btn new-repo\" id=\"btn-new-project\" href=\"/repos/new\"  data-effect=\"mfp-3d-unfold\">
 \t\t\t<span class=\"fa fa-plus-circle\"></span> Créer un projet
 \t\t</a>
 \t</div>
@@ -87,12 +87,12 @@ class __TwigTemplate_1558733aed2cf6887c7dd31a6985dbfbbd051b51a7d940614daeac944be
 
 ";
         // line 47
-        $this->loadTemplate("blocks/footer.html", "repos/list.html", 47)->display($context);
+        $this->loadTemplate("blocks/footer.html", "repo-list.html", 47)->display($context);
     }
 
     public function getTemplateName()
     {
-        return "repos/list.html";
+        return "repo-list.html";
     }
 
     public function isTraitable()
@@ -121,7 +121,7 @@ class __TwigTemplate_1558733aed2cf6887c7dd31a6985dbfbbd051b51a7d940614daeac944be
 <div class=\"container list-repos\">
 \t<div class=\"title-zone\">
 \t\t<h1>Liste des projets</h1>
-\t\t<a class=\"btn new-repo\" id=\"btn-new-project\" href=\"/repos/create\"  data-effect=\"mfp-3d-unfold\">
+\t\t<a class=\"btn new-repo\" id=\"btn-new-project\" href=\"/repos/new\"  data-effect=\"mfp-3d-unfold\">
 \t\t\t<span class=\"fa fa-plus-circle\"></span> Créer un projet
 \t\t</a>
 \t</div>
@@ -162,6 +162,6 @@ class __TwigTemplate_1558733aed2cf6887c7dd31a6985dbfbbd051b51a7d940614daeac944be
 </section> -->
 
 {% include 'blocks/footer.html' %}
-", "repos/list.html", "/home/vagrant/nectar/app/views/repos/list.html");
+", "repo-list.html", "/home/vagrant/nectar/app/views/repo-list.html");
     }
 }

@@ -26,6 +26,8 @@ class __TwigTemplate_cf0462b738ca5db96b2924b56228ae906d4aba63ae28629af7854e81b2d
         echo twig_escape_filter($this->env, ($context["title"] ?? null), "html", null, true);
         echo " : <input type=\"checkbox\" id=\"";
         echo twig_escape_filter($this->env, ($context["id"] ?? null), "html", null, true);
+        echo "\" name=\"";
+        echo twig_escape_filter($this->env, ($context["id"] ?? null), "html", null, true);
         echo "\" value=\"";
         echo twig_escape_filter($this->env, ($context["value"] ?? null), "html", null, true);
         echo "\"></label>
@@ -50,7 +52,7 @@ class __TwigTemplate_cf0462b738ca5db96b2924b56228ae906d4aba63ae28629af7854e81b2d
 
     public function getDebugInfo()
     {
-        return array (  34 => 3,  22 => 2,  19 => 1,);
+        return array (  36 => 3,  22 => 2,  19 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -64,7 +66,7 @@ class __TwigTemplate_cf0462b738ca5db96b2924b56228ae906d4aba63ae28629af7854e81b2d
     public function getSourceContext()
     {
         return new Twig_Source("<div class=\"field\">
-\t<label for=\"{{id}}\"><i class=\"fa fa-{{icon}}\"></i> {{title}} : <input type=\"checkbox\" id=\"{{id}}\" value=\"{{value}}\"></label>
+\t<label for=\"{{id}}\"><i class=\"fa fa-{{icon}}\"></i> {{title}} : <input type=\"checkbox\" id=\"{{id}}\" name=\"{{id}}\" value=\"{{value}}\"></label>
 \t<p class=\"description\">{{description}}</p>
 </div>
 

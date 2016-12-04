@@ -16,7 +16,7 @@ class Repos extends Controller {
     $reposList = $repoModel->getAll();
 
     if ( isset( $reposList ) ) {
-      $this->view( 'repos/list', ['repos' => $reposList] );
+      $this->view( 'repo-list', ['repos' => $reposList] );
     }
     else {
       header( 'Location: /login' );
@@ -24,9 +24,29 @@ class Repos extends Controller {
 
   }
 
-  public function create() {
-      $this->view( 'repos/create', ['repos' => 'coucou'] );
+  public function new() {
+    $this->view( 'repo-new', [] );
   }
+
+  public function create() {
+    $repoModel = $this->model( 'repo' );
+    $newRepo = $repoModel->create( $_GET['projectname'] );
+    echo $newRepo;
+
+  }
+
+  public function commit() {
+    $repoModel = $this->model( 'repo' );
+    $firstCommit = $repoModel->commit( $_GET['projectid'] );
+     ?>
+      <pre>
+        <?php
+         print_r($firstCommit);
+        ?>
+        </pre>
+       <?php
+  }
+
 
   private function setUpRepo() {
     //require __DIR__ . '/vendor/autoload.php';
@@ -38,4 +58,38 @@ class Repos extends Controller {
     //    ->addArgument('bare','/home/kursus/websites/git/gitcreator/coco');
     // $shell->run($command);
   }
+
+
+
+
+
+
+
+  public function test() {
+
+    require_once PARAMS;
+    $httpCode = 401;
+
+    if ( isset( $_SESSION['access_token'] ) ) {
+      $accessToken = $_SESSION['access_token'];
+      $api = new RestClient( ['base_url' => $apiUrl] );
+      $response = $api->get( "groups", ['search' => 'preview', 'access_token' => $accessToken] );
+      $group =  $response->decode_response();
+      echo $group[0]->id;
+
+
+    }
+    if ( $httpCode == 200 ) {
+      $test = $response->decode_response();
+      return $test;
+    } else {
+      return null;
+    }
+    echo $test;
+
+
+
+  }
+
+
 }

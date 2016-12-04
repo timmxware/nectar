@@ -10,11 +10,11 @@ class Repo {
 
 		if ( isset( $_SESSION['access_token'] ) ) {
 			$accessToken = $_SESSION['access_token'];
-			$api = new RestClient(['base_url' => $apiUrl]);
-			$response = $api->get("projects", ['access_token' => $accessToken]);
+			$api = new RestClient( ['base_url' => $apiUrl,  'headers' => ['Authorization' => 'Bearer '.$accessToken] ] );
+			$response = $api->get( "projects");
 			$httpCode = $response->info->http_code;
 		}
-		if ($httpCode == 200) {
+		if ( $httpCode == 200 ) {
 			$repos = $response->decode_response();
 			return $repos;
 		} else {
@@ -22,4 +22,86 @@ class Repo {
 		}
 	}
 
+	public function create( $repoName ) {
+
+		require_once PARAMS;
+		$httpCode = 401;
+
+		if ( isset( $_SESSION['access_token'] ) ) {
+
+			// Get accesss token
+			$accessToken = $_SESSION['access_token'];
+
+			// New API Client
+			$api = new RestClient( ['base_url' => $apiUrl] );
+
+			// Get Id of "Preview" group
+			$response = $api->get( 'groups', ['search' => 'projets', 'access_token' => $accessToken] );
+			$group =  $response->decode_response();
+			$groupId = $group[0]->id;
+
+
+			$response = $api->post( 'projects', ['namespace_id' => $groupId, 'name' => $repoName, 'access_token' => $accessToken] );
+			$httpCode = $response->info->http_code;
+			$project = $response->decode_response();
+		}
+
+		if ( $httpCode == 201 ) {
+			return $project->id;
+		} else {
+			return null;
+		}
+
+	}
+
+	public function commit( $projectId ) {
+
+		require_once PARAMS;
+		$httpCode = 401;
+
+		if ( isset( $_SESSION['access_token'] ) ) {
+
+			// Get accesss token
+			$accessToken = $_SESSION['access_token'];
+
+
+			$obj = new stdClass();
+			$obj->branch_name= 'master';
+			$obj->commit_message= 'First commit !';
+			$obj->actions = array(
+				array( 'action', 'create' ),
+				array( 'file_path', 'thisworks.php' ),
+				array( 'content', 'Ho yeah !!' )
+			);
+
+			$dd = '{
+  "branch_name": "master",
+  "commit_message": "some commit message",
+  "actions": [
+    {
+      "action": "create",
+      "file_path": "thisworks.php",
+      "content": "some content"
+    }]}';
+
+			$test = json_encode( $obj );
+
+			// New API Client
+			$api = new RestClient( ['base_url' => $apiUrl,  'headers' => ['Authorization' => 'Bearer '.$accessToken] ] );
+			// $api->set_option( 'format', "json" );
+
+			// Get Id of "Preview" group
+			$response = $api->post( 'projects/'.$projectId.'/repository/commits', $dd, array( 'Content-Type' => 'application/json' ) );
+			$commit =  $response->decode_response();
+			return $commit;
+
+		}
+		// if ( $httpCode == 200 ) {
+		//  $repo = $response->decode_response();
+		//  return $repo;
+		// } else {
+		//  return null;
+		// }
+
+	}
 }

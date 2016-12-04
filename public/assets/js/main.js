@@ -1,21 +1,12 @@
 $( document ).ready(function() {
 
 
-	$("#create-project-field-projectname").on("keyup paste", function() {
+	$(document).on("keyup paste", '#create-project-field-projectname', function() {
 		$("#create-project-field-defaultdb").val($(this).val());
 	});
 
-	$('#advanced-settings-title').on('click', function(){
+	$(document).on('click', '#advanced-settings-title', function(){
 		$('#advanced-settings').slideToggle('slow');
-	});
-
-	$.extend($.modal.defaults, {
-		escapeClose: true,
-		clickClose: false,
-		closeText: 'Fermer',
-		showSpinner: false,
-		fadeDuration: 240,
-		fadeDelay: 1.0
 	});
 
 
@@ -36,19 +27,92 @@ $( document ).ready(function() {
 //     });
 
 
-$('#btn-new-project').click(function(event) {
-  event.preventDefault();
-  $.get(this.href, function(html) {
-    $(html).appendTo('body').modal();
-  });
+// $('#btn-new-project').click(function(event) {
+//   event.preventDefault();
+//   $.get(this.href, function(html) {
+//     $(html).appendTo('body').modal();
+//   });
+// });
+
+
+
+// $.get("/feature/", function(html) {
+
+//   // Get the CSS
+//   $.get("/assets/feature.css", function(css) {
+
+//     // Get the JavaScript
+//     $.getScript("/assets/feature.js", function() {
+
+//        // All is ready now, so...
+
+//        // Add CSS to page
+//        $("<style />").html(css).appendTo("head");
+
+//        // Add HTML to page
+//        $("body").append(html);
+
+//     });
+
+//   });
+
+// });
+
+
+// $.get("/repos/", function(html) {
+// console.log(html);
+
+// });
+
+
+$('#btn-new-project').magnificPopup({
+	type: 'ajax',
+	closeBtnInside: false,
+	mainClass: 'mfp-3d-unfold',
+	  removalDelay: 500, //delay removal by X to allow out-animation
+	  callbacks: {
+	  	ajaxContentAdded: function() {
+
+	  	}
+	  },
+	});
+
+
+
+$(document).on('click', '#btn-create-project', function(e){
+	e.preventDefault();
+	// Get data from input fields
+	var formData = $('#form-repo-new form').serializeArray();
+	// Launch repo set up
+	repoSetup(formData);
 });
 
 
+function repoSetup(formData) {
+	$.magnificPopup.open({
+		items: {
+			src: '<div id="modal-repo-setup"></div>',
+			type: 'inline'
+		}
+	});
 
+	$.get("/repos/create", formData, function(projectId) {
 
-$('#btn-new-project').on($.modal.BEFORE_CLOSE, function(event, modal) {
-  console.log("hey");
+		$.get("/repos/commit", {projectid : projectId}, function(status) {
+		console.log(status);
+
+		});
+		  // location.reload();
+	// $('#modal-repo-setup').append(html);
 });
+
+
+}
+
+
+// $('#btn-new-project').on($.modal.BEFORE_CLOSE, function(event, modal) {
+//   console.log("hey");
+// });
 
 
 

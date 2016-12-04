@@ -4,11 +4,11 @@ class Token {
 
 	public function getOAuthUrl() {
 
-
 		require_once PARAMS;
+
 		// Mitigates cross site request forgery attacks.
 		$_SESSION['state'] = rand( 0, 999999999 );
-		echo $_SESSION['state'] ;
+
 		// URL parameters used to request an authorization token
 		$queryParams = array(
 			'client_id' => $clientId,
@@ -28,8 +28,6 @@ class Token {
 		// Get the authorization code from the URL as well as the cross site forgery mitigation value.
 		$code = $_GET['code'];
 		$state = $_GET['state'];
-
-
 
 		// Verify the 'state' value is the same random value we created
 		// when initiating the authorization request.
