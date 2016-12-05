@@ -32,7 +32,7 @@ class Token {
 		// Verify the 'state' value is the same random value we created
 		// when initiating the authorization request.
 		if ( ( ! is_numeric( $state ) ) || ( $state != $_SESSION['state'] ) ) {
-			throw new Exception( 'Error validating state.  Possible cross-site request forgery.' );
+			return false;
 		}
 
 		// These params will be added to the URL used in

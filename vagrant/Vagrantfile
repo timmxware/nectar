@@ -1,0 +1,113 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##
+##                                    ##
+##                                    ##
+##   PLEASE DEFINE THESE VARIABLES    ##
+##         BEFORE VAGRANT UP!         ##
+##                                    ##
+##                                    ##
+##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##
+
+
+# Project name defines :
+# -the virtualhost name, accessible from http://project_name.local
+# -the folder name in /var/www
+# -the created mysql database name
+project_name = "mycommunit"
+
+# PHP version ("5" or "7.x")
+# !! This can't be changed once the box is setup !!
+php_version = "5"
+
+# Defines Apache virtualhost base directory
+# Must exist in your working folder root directory
+public_folder = "web"
+
+# sql data loaded into project database
+default_database = "default.sql"
+
+
+##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##
+##                                    ##
+##      ADVANCED CONFIGURATION :      ##
+##     DO NOT CHANGE THE FOLLOWING    ##
+##        UNLESS YOU KNOW WHY!        ##
+##                                    ##
+##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##
+
+
+# Default password for everything that needs one (mysql, phpmyadmin...)
+root_password = "root"
+
+# Project IP address
+ip_address = "192.168.42.42"
+
+# PHPMyAdmin version
+pma_version = "4.6.4"
+
+# Timezone
+time_zone = "Europe/Paris"
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+Vagrant.configure("2") do |config|
+
+  # Define VM box to use
+  #config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "bento/debian-8.6"
+  config.vm.box_check_update = false
+
+  # Customize the amount of memory on the VM:
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = 1
+    vb.memory = "2048"
+  end
+
+   # mount public_folder as Apache document root with write permissions
+  config.vm.synced_folder "./" , "/var/www/" + project_name + "/", id: "vagrant-web", nfs: true
+
+  # mount databases folder in /home/vagrant/databases
+  config.vm.synced_folder "./provisions/databases" , "/home/vagrant/databases", id: "phpmyadmin-pma", nfs: true
+
+  # Enable vagrant-hostmanager plugin on host machine
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.manage_guest = false
+
+  # Enable a private network and edit hosts file on host machine
+  config.vm.define project_name do |node|
+    node.vm.hostname = project_name + ".local"
+    #node.hostmanager.aliases = [ "www." + project_name + ".local" ]
+    node.vm.network :private_network, ip: ip_address
+    node.vm.network :forwarded_port,  guest: 1080, host: 1080
+  end
+  config.vm.provision :hostmanager
+
+  # Execute the configuration script (provisions/bootstrap.sh)
+  config.vm.provision :shell, :path => 'provisions/vm.bootstrap.sh', :args =>
+  ["true", project_name, root_password, ip_address, default_database,php_version,pma_version,time_zone]
+
+  # Same script but will be executed on each boot, applies conf files
+  config.vm.provision :shell, :path => 'provisions/vm.bootstrap.sh', :args =>
+  ["false", project_name, root_password, ip_address, default_database,php_version,pma_version,time_zone], :run => 'always'
+
+  # Execute the configuration script (provisions/bootstrap.sh)
+  #config.vm.provision :shell, :path => 'provisions/project.bootstrap.sh', :args =>
+  #["true", project_name, root_password, ip_address, default_database,php_version,pma_version,time_zone]
+
+  ## Same script but will be executed on each boot, applies conf files
+  #config.vm.provision :shell, :path => 'provisions/project.bootstrap.sh', :args =>
+  #["false", project_name, root_password, ip_address, default_database,php_version,pma_version,time_zone], :run => 'always'
+
+  # Boot message :
+  config.vm.post_up_message = "
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n
+    Projet:       http://"+project_name+".local\n
+    PHPMyAdmin:   http://"+project_name+".local/phpmyadmin\n
+    Adminer:      http://"+project_name+".local/adminer\n
+    MailCatcher:  http://"+project_name+".local:1080\n
+    Apache log:   http://"+project_name+".local/apache\n
+    "
+end

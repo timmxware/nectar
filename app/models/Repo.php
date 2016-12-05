@@ -54,7 +54,7 @@ class Repo {
 
 	}
 
-	public function commit( $projectId ) {
+	public function commit( $projectId, $files ) {
 
 		require_once PARAMS;
 		$httpCode = 401;
@@ -64,37 +64,14 @@ class Repo {
 			// Get accesss token
 			$accessToken = $_SESSION['access_token'];
 
-
-			$obj = new stdClass();
-			$obj->branch_name= 'master';
-			$obj->commit_message= 'First commit !';
-			$obj->actions = array(
-				array( 'action', 'create' ),
-				array( 'file_path', 'thisworks.php' ),
-				array( 'content', 'Ho yeah !!' )
-			);
-
-			$dd = '{
-  "branch_name": "master",
-  "commit_message": "some commit message",
-  "actions": [
-    {
-      "action": "create",
-      "file_path": "thisworks.php",
-      "content": "some content"
-    }]}';
-
-			$test = json_encode( $obj );
-
 			// New API Client
 			$api = new RestClient( ['base_url' => $apiUrl,  'headers' => ['Authorization' => 'Bearer '.$accessToken] ] );
-			// $api->set_option( 'format', "json" );
+			//$api->set_option( 'format', "json" );
 
 			// Get Id of "Preview" group
-			$response = $api->post( 'projects/'.$projectId.'/repository/commits', $dd, array( 'Content-Type' => 'application/json' ) );
+			$response = $api->post( 'projects/'.$projectId.'/repository/commits', $files, array( 'Content-Type' => 'application/json' ) );
 			$commit =  $response->decode_response();
 			return $commit;
-
 		}
 		// if ( $httpCode == 200 ) {
 		//  $repo = $response->decode_response();

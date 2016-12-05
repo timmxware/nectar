@@ -30,21 +30,18 @@ class Repos extends Controller {
 
   public function create() {
     $repoModel = $this->model( 'repo' );
-    $newRepo = $repoModel->create( $_GET['projectname'] );
-    echo $newRepo;
-
+    $repoId = $repoModel->create( $_GET['projectname'] );
+    echo $repoId;
   }
 
   public function commit() {
+
+    $provisionModel = $this->model( 'provision' );
+    $files = $provisionModel->getAll();
+
     $repoModel = $this->model( 'repo' );
-    $firstCommit = $repoModel->commit( $_GET['projectid'] );
-     ?>
-      <pre>
-        <?php
-         print_r($firstCommit);
-        ?>
-        </pre>
-       <?php
+    $firstCommit = $repoModel->commit( $_GET['projectid'], $files );
+
   }
 
 
@@ -67,27 +64,22 @@ class Repos extends Controller {
 
   public function test() {
 
-    require_once PARAMS;
-    $httpCode = 401;
 
-    if ( isset( $_SESSION['access_token'] ) ) {
-      $accessToken = $_SESSION['access_token'];
-      $api = new RestClient( ['base_url' => $apiUrl] );
-      $response = $api->get( "groups", ['search' => 'preview', 'access_token' => $accessToken] );
-      $group =  $response->decode_response();
-      echo $group[0]->id;
+$vagrant = file_get_contents(INC_ROOT.'/vagrant/Vagrantfile');
 
 
-    }
-    if ( $httpCode == 200 ) {
-      $test = $response->decode_response();
-      return $test;
-    } else {
-      return null;
-    }
-    echo $test;
+      $dd = '{
+  "branch_name": "master",
+  "commit_message": "some commit message",
+  "actions": [
+    {
+      "action": "create",
+      "file_path": "thisworks.php",
+      "content": "'.$vagrant.'"
+    }]}';
 
 
+echo $dd;
 
   }
 
