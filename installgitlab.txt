@@ -38,6 +38,20 @@ install apache
 </VirtualHost>
 
 
+<VirtualHost *:80>
+  ServerName nectar.gitlab.local
+  RewriteEngine on
+ DocumentRoot /home/vagrant/nectar/public
+  <Directory /home/vagrant/nectar/public>
+    Options FollowSymLinks
+    AllowOverride All
+    Require all granted
+ </Directory>
+</VirtualHost>
+
+
+
+
 sudo gitlab-ctl reconfigure
 
 http://requiremind.com/a-most-simple-php-mvc-beginners-tutorial/

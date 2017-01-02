@@ -4,6 +4,9 @@
  * The default home controller, called when no controller/method has been passed
  * to the application.
  */
+   use AdamBrett\ShellWrapper\Runners\Exec;
+   use AdamBrett\ShellWrapper\Command\Builder as CommandBuilder;
+
 class Repos extends Controller {
   /**
    * The default controller method.
@@ -45,17 +48,16 @@ class Repos extends Controller {
   }
 
 
-  private function setUpRepo() {
-    //require __DIR__ . '/vendor/autoload.php';
-    // use AdamBrett\ShellWrapper\Runners\Exec;
-    // use AdamBrett\ShellWrapper\Command\Builder as CommandBuilder;
-    // $shell = new Exec();
-    // $command = new CommandBuilder('/usr/bin/git');
-    // $command->addSubCommand('init')
-    //    ->addArgument('bare','/home/kursus/websites/git/gitcreator/coco');
-    // $shell->run($command);
-  }
+  public function setUpRepo() {
 
+   $shell = new Exec();
+   $command = new CommandBuilder('/usr/bin/git');
+   $command->addSubCommand('clone');
+   $command->addParam('https://github.com/teqneers/PHP-Stream-Wrapper-for-Git.git');
+   $command->addParam('/var/www/html/test');
+   $shell->run($command);
+   echo 'ok';
+  }
 
 
 

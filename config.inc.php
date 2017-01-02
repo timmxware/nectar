@@ -2,8 +2,8 @@
 $localUrl = 'http://nectar.gitlab.local';
 $gitlabServer = 'http://preview.gitlab.local';
 
-$clientId = '0f3809ef031737abb7445b491dff6cc8dd5604f33f1210eadf42f679797f2077';
-$clientSecret = '2cdb2c9b5a52e8e3cad948a398aef280f288be45160ca7a1504a4c41f17ad992';
+$clientId = '383e8ad8db54f40d10519051f56c30252eac61b97a6b2e1f2a8773dee367563d';
+$clientSecret = 'd6022802a59f627d875384924765aaeaa90ea01a22b10f58031f26f1edd321d7';
 
 
 $authorizeUrl = $gitlabServer.'/oauth/authorize';

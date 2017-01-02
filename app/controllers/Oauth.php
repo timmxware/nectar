@@ -19,8 +19,7 @@ class Oauth extends Controller {
       header( 'Location: /' );
     }
     else {
-      die();
-      header( 'Location: /login' );
+        header( 'Location: /login' );
     }
 
   }
