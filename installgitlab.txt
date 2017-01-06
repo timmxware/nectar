@@ -54,6 +54,17 @@ install apache
 
 sudo gitlab-ctl reconfigure
 
+
+
+** Web flow***
+Create a web user
+activate mod userdir
+sudo setfacl -Rd -m u:www-data:rwx /home/web/public
+
+
+
+
+
 http://requiremind.com/a-most-simple-php-mvc-beginners-tutorial/
 https://www.dev-metal.com/mini-extremely-simple-barebone-php-application/
 

@@ -4,8 +4,6 @@
  * The default home controller, called when no controller/method has been passed
  * to the application.
  */
-   use AdamBrett\ShellWrapper\Runners\Exec;
-   use AdamBrett\ShellWrapper\Command\Builder as CommandBuilder;
 
 class Repos extends Controller {
   /**
@@ -50,39 +48,13 @@ class Repos extends Controller {
 
   public function setUpRepo() {
 
-   $shell = new Exec();
-   $command = new CommandBuilder('/usr/bin/git');
-   $command->addSubCommand('clone');
-   $command->addParam('https://github.com/teqneers/PHP-Stream-Wrapper-for-Git.git');
-   $command->addParam('/var/www/html/test');
-   $shell->run($command);
+
+exec('cd /home/web/public && touch coucou.txt', $outputArray1);
+exec('pwd', $outputArray);
+print_r($outputArray1);
+
+
    echo 'ok';
-  }
-
-
-
-
-
-
-  public function test() {
-
-
-$vagrant = file_get_contents(INC_ROOT.'/vagrant/Vagrantfile');
-
-
-      $dd = '{
-  "branch_name": "master",
-  "commit_message": "some commit message",
-  "actions": [
-    {
-      "action": "create",
-      "file_path": "thisworks.php",
-      "content": "'.$vagrant.'"
-    }]}';
-
-
-echo $dd;
-
   }
 
 
