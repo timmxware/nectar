@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "./" , "/var/www/" + project_name + "/", id: "vagrant-web", nfs: true
 
   # mount databases folder in /home/vagrant/databases
-  config.vm.synced_folder "./provisions/databases" , "/home/vagrant/databases", id: "phpmyadmin-pma", nfs: true
+  config.vm.synced_folder "./databases" , "/home/vagrant/databases", id: "phpmyadmin-pma", nfs: true
 
   # Enable vagrant-hostmanager plugin on host machine
   config.hostmanager.enabled = true
@@ -84,26 +84,43 @@ Vagrant.configure("2") do |config|
   end
   config.vm.provision :hostmanager
 
-  # Execute the configuration script (provisions/bootstrap.sh)
-  config.vm.provision :shell, :path => 'provisions/vm.bootstrap.sh', :args =>
+  # VM install script (only first boot)
+  config.vm.provision :shell, :path => 'config/vm/vm.boot.sh', :args =>
   ["true", project_name, root_password, ip_address, default_database,php_version,pma_version,time_zone]
 
-  # Same script but will be executed on each boot, applies conf files
-  config.vm.provision :shell, :path => 'provisions/vm.bootstrap.sh', :args =>
+  # VM configure script (every boot)
+  config.vm.provision :shell, :path => 'config/vm/vm.boot.sh', :args =>
   ["false", project_name, root_password, ip_address, default_database,php_version,pma_version,time_zone], :run => 'always'
 
-  # Execute the configuration script (provisions/bootstrap.sh)
-  #config.vm.provision :shell, :path => 'provisions/project.bootstrap.sh', :args =>
-  #["true", project_name, root_password, ip_address, default_database,php_version,pma_version,time_zone]
+  # Project install script (only first boot)
+  config.vm.provision :shell, :path => 'scripts/install.sh'
 
-  ## Same script but will be executed on each boot, applies conf files
-  #config.vm.provision :shell, :path => 'provisions/project.bootstrap.sh', :args =>
-  #["false", project_name, root_password, ip_address, default_database,php_version,pma_version,time_zone], :run => 'always'
+  # Project configure script (every boot)
+  config.vm.provision :shell, :path => 'scripts/restart.sh', :run => 'always'
 
   # Boot message :
   config.vm.post_up_message = "
-    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n
+    ░░░░░░░░░░░░░░░░░░░░░░░░░░█▄\n
+    ░▄▄▄▄▄▄░░░░░░░░░░░░░▄▄▄▄▄░░█▄\n
+    ░▀▀▀▀▀███▄░░░░░░░▄███▀▀▀▀░░░█▄\n
+    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█\n
+    ░▄▀▀▀▀▀▄░░░░░░░░░░▄▀▀▀▀▀▄░░░░█\n
+    █▄████▄░▀▄░░░░░░▄█░▄████▄▀▄░░█▄\n
+    ████▀▀██░▀▄░░░░▄▀▄██▀█▄▄█░█▄░░█\n
+    ██▀██████░█░░░░█░████▀█▀██░█░░█\n
+    ████▀▄▀█▀░█░░░░█░█████▄██▀▄▀░░█\n
+    ███████▀░█░░░░░░█░█████▀░▄▀░░░█\n
+    ░▀▄▄▄▄▄▀▀░░░░░░░░▀▀▄▄▄▄▀▀░░░░░█\n
+    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█\n
+    ░░▓▓▓▓▓▓▓░░░░░░░░░░▓▓▓▓▓▓▓░░░░█\n
+    ░░░▓▓▓▓▓░░░░░░░░░░░░▓▓▓▓▓░░░░░█\n
+    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█\n
+    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█▀\n
+    ░░░░░░░░░▄▄███████▄▄░░░░░░░░░█\n
+    ░░░░░░░░█████████████░░░░░░░█▀\n
+    ░░░░░░░░░▀█████████▀░░░░░░░█▀\n
+    ░░░░░░░░░░░░░░░░░░░░░░░░░░█▀\n
+    ░░░░░░░░░░░░░░░░░░░░░░░░░█▀\n
     Projet:       http://"+project_name+".local\n
     PHPMyAdmin:   http://"+project_name+".local/phpmyadmin\n
     Adminer:      http://"+project_name+".local/adminer\n

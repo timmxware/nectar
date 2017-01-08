@@ -1,53 +1,17 @@
 #!/bin/bash
 
-##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##
-##                                    ##
-##      ADVANCED CONFIGURATION :      ##
-##     DO NOT CHANGE THE FOLLOWING    ##
-##        UNLESS YOU KNOW WHY         ##
-##                                    ##
-##     PLEASE DEFINE THE VARIABLES    ##
-##         IN THE VAGRANTFILE         ##
-##         BEFORE VAGRANT UP!         ##
-##                                    ##
-##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##
-
-# Prevents Vagrant warning messages
-export DEBIAN_FRONTEND=noninteractive
-
 #***************************************#
 #                                       #
-#          VAGRANT VARIABLES            #
+#         WELCOME TO YOUR DOOM          #
 #                                       #
 #***************************************#
 
-
-# Get variables defined in Vagrantfile
-ISFIRSTRUN=$1
-PROJECTNAME=$2
-PASSWORD=$3
-IPADRESS=$4
-DATABASE=$5
-PHPVERSION=$6
-PMAVERSION=$7
-TIMEZONE=$8
-
-# Export variables to work with configuration templates
-export PROJECTNAME PASSWORD IPADRESS DATABASE TIMEZONE
-CONFIGVARS='$PROJECTNAME:$PASSWORD:$IPADRESS:$DATABASE:$TIMEZONE'
-
-
-#***************************************#
-#                                       #
-#       BEGIN FIRST BOOT CONFIG         #
-#                                       #
-#***************************************#
-
-
-if [ "$ISFIRSTRUN" = "true" ] ; then
 
 # set timezone
 sudo timedatectl set-timezone "$TIMEZONE"
+
+# ssh to mounted folder
+echo "cd /vagrant" >> /home/vagrant/.bashrc
 
 
 #***************************************#
@@ -144,7 +108,7 @@ sudo apt-get -y install mysql-server php"$PHPVERSION"-mysql
 mysql -u root -p"$PASSWORD" -e "CREATE DATABASE ${PROJECTNAME};"
 
 # import selected database
-mysql -u root -p"$PASSWORD" "$PROJECTNAME" < /vagrant/provisions/databases/$DATABASE
+mysql -u root -p"$PASSWORD" "$PROJECTNAME" < /databases/$DATABASE
 
 
 #***************************************#
@@ -174,7 +138,7 @@ mysql -u root -p"$PASSWORD" -e "GRANT SELECT, INSERT, DELETE, UPDATE ON phpmyadm
 
 # install Adminer
 sudo mkdir /var/www/adminer
-sudo cp /vagrant/provisions/vendor/adminer.php /var/www/adminer/adminer.php
+sudo cp /vagrant/vendor/adminer.php /var/www/adminer/adminer.php
 
 
 #***************************************#
@@ -210,34 +174,3 @@ sudo mv composer.phar /usr/local/bin/composer
 
 
 
-#***************************************#
-#                                       #
-# THE FOLLOWING IS APPLIED ON EACH BOOT #
-#                                       #
-#***************************************#
-
-else
-
-# ssh to mounted folder
-echo "cd /vagrant" >> /home/vagrant/.bashrc
-
-# configure virtualhost (see config/virtualhost.conf)
-envsubst "$CONFIGVARS" < /vagrant/provisions/config/virtualhost.conf | sudo tee /etc/apache2/sites-available/000-default.conf
-
-# configure Apache web logs (see config/apache-web-log.php)
-envsubst "$CONFIGVARS" < /vagrant/provisions/vendor/apache-web-log.php | sudo tee /var/www/apache/index.php
-
-# Configure PHP (see config/php.ini)
-if [ $PHPVERSION = "5" ] ; then PHPPATH="php" ; else PHPPATH="php/" ; fi
-envsubst "$CONFIGVARS" < /vagrant/provisions/config/php.ini | sudo tee /etc/$PHPPATH$PHPVERSION/apache2/conf.d/01-$PROJECTNAME.ini
-
-# configure PhpMyAdmin (see config/phpmyadmin.php)
-envsubst "$CONFIGVARS" < /vagrant/provisions/config/phpmyadmin.php | sudo tee /var/www/phpmyadmin/config.inc.php
-
-# start mailcatcher
-mailcatcher --ip=0.0.0.0
-
-# restart Apache
-sudo service apache2 restart
-
-fi
