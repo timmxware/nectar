@@ -25,10 +25,10 @@ class Provision {
 		'phpmyadmin.php' 		=> 'vagrant/config/',
 
 		// Database
-		'default.sql'			=> 'databases/'
+		'default.sql'			=> 'databases/',
 
 		// Web
-		'welcome.html'			=> 'web/'
+		'welcome.html'			=> 'web/',
 		];
 
 		// Prepare commit json

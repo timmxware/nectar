@@ -50,11 +50,11 @@ current_dir="$(dirname "$0")"
 if [ "$ISFIRSTRUN" = "true" ] ; then
 
 # Is executed on first boot
-"$current_dir/vm.install.sh"
+"$current_dir/vm-install.sh"
 
 else
 
 # Is executed every boot
-"$current_dir/vm.configure.sh"
+"$current_dir/vm-configure.sh"
 
 fi
