@@ -1,5 +1,7 @@
 install gitlab
 
+# https://stefanwrobel.com/how-to-make-vagrant-performance-not-suck
+
 sudo gitlab-ctl stop
 sudo apt-get remove nginx
 
@@ -61,6 +63,40 @@ Create a web user
 activate mod userdir
 sudo setfacl -Rd -m u:www-data:rwx /home/web/public
 
+
+
+*** Auto vhost ****
+
+sudo a2enmod virtual_hosts
+
+UseCanonicalName Off
+<VirtualHost *:80>
+  ServerName gitlab.local
+  ServerAlias *.gitlab.local
+
+  VirtualDocumentRoot /home/pol/%1/public
+
+  <Directory ~ "/home/pol/.*/public">
+    Options Indexes FollowSymlinks MultiViews
+    AllowOverride All
+    Require all granted
+
+  </Directory>
+</VirtualHost>
+
+
+**** Hooks au nom de gitlab ******
+sudo -u git -H mkdir custom_hooks
+sudo -u git -H vim post-receive
+
+
+******* Deploy script for server *******
+git clone
+git checkout master
+gitlab hook
+bootstrap.sh
+restart.sh
+rm -- "$0"
 
 
 
