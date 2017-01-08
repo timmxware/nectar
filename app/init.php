@@ -19,7 +19,7 @@ define('HTTP_ROOT',
     str_replace(
         $_SERVER['DOCUMENT_ROOT'],
         '',
-        str_replace('\\', '/', INC_ROOT).'/public'
+        str_replace('\\', '/', INC_ROOT).'/web'
     )
 );
 
@@ -29,6 +29,6 @@ define('ASSET_ROOT',
     str_replace(
         $_SERVER['DOCUMENT_ROOT'],
         '',
-        str_replace('\\', '/', INC_ROOT).'/public/assets'
+        str_replace('\\', '/', INC_ROOT).'/web/assets'
     )
 );

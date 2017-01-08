@@ -2,24 +2,41 @@
 
 class Provision {
 
+	// Return a JSON containg first commit
 	public function getAll() {
 
+		// Get files and define their path
 		$files = [
-		'Vagrantfile' => '',
-		'project.bootstrap.sh' => 'provisions/',
-		'vm.bootstrap.sh' => 'provisions/',
-		'virtualhost.conf' => 'provisions/config/',
-		'php.ini' => 'provisions/config/',
-		'phpmyadmin.php' => 'provisions/config/',
-		'default.sql' => 'provisions/databases/',
-		'apache-web-log.php' => 'provisions/vendor/',
-		'adminer.php' => 'provisions/vendor/'
+		// VM
+		'Vagrantfile' 			=> '',
+		'vm-boot.sh' 		=> 'vagrant/config/vm/',
+		'vm-configure.sh' 	=> 'vagrant/config/vm/',
+		'vm-install.sh' 	=> 'vagrant/config/vm/',
+
+		// Project
+		'project-install.sh' 	=> 'scripts/',
+		'project-restart.sh' 	=> 'scripts/',
+
+		// Server
+		'adminer.php' 			=> 'vagrant/vendor/',
+		'apache-web-log.php' 	=> 'vagrant/vendor/',
+		'virtualhost.conf' 		=> 'vagrant/config/',
+		'php.ini' 				=> 'vagrant/config/',
+		'phpmyadmin.php' 		=> 'vagrant/config/',
+
+		// Database
+		'default.sql'			=> 'databases/'
+
+		// Web
+		'welcome.html'			=> 'web/'
 		];
 
+		// Prepare commit json
 		$json = '{"branch_name": "master", "commit_message": "Premier commit", "actions": [';
 
+		// Apply config to files and include them in commit
 		foreach ( $files as $name => $path ) {
-			$content = base64_encode( file_get_contents( INC_ROOT.'/vagrant/'.$path.$name ) );
+			$content = base64_encode( file_get_contents( INC_ROOT.'/samples/'.$name ) );
 			$json .= '{
 				"action": "create",
 				"encoding": "base64",
@@ -27,6 +44,8 @@ class Provision {
 				"content": "'.$content.'"
 			},';
 		}
+
+		// Clean commit json
 		$json = rtrim($json, ",");
 		$json .= ']}';
 
