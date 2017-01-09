@@ -98,8 +98,9 @@ function repoSetup(formData) {
 
 	$.get("/repos/create", formData, function(projectId) {
 
-		$.get("/repos/commit", {projectid : projectId}, function(status) {
-		console.log(status);
+		formData.push({"name":"projectid", "value":projectId});
+		console.log(formData);
+		$.get("/repos/commit", formData, function(status) {
 
 		});
 		  // location.reload();

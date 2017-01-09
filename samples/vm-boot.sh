@@ -22,7 +22,7 @@ export DEBIAN_FRONTEND=noninteractive
 #***************************************#
 
 # Get project settings
-source /vagrant/vagrant/config/vm/vm-settings.conf
+source /vagrant/vagrant/config/project-settings.rb
 
 # Export variables to replace them in config files
 export PROJECTNAME PASSWORD IPADRESS DATABASE PHPVERSION PMAVERSION TIMEZONE

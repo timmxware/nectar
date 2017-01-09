@@ -8,25 +8,26 @@ class Provision {
 		// Get files and define their path
 		$files = [
 		// VM
-		'Vagrantfile' 			=> '',
-		'vm-boot.sh' 		=> 'vagrant/config/vm/',
-		'vm-configure.sh' 	=> 'vagrant/config/vm/',
-		'vm-install.sh' 	=> 'vagrant/config/vm/',
+		'Vagrantfile'   => '',
+		'vm-boot.sh'   => 'vagrant/config/vm/',
+		'vm-configure.sh'  => 'vagrant/config/vm/',
+		'vm-install.sh'  => 'vagrant/config/vm/',
 
 		// Project
-		'project-install.sh' 	=> 'scripts/',
-		'project-restart.sh' 	=> 'scripts/',
+		'project-settings.rb'  => 'vagrant/config/',
+		'project-install.sh'  => 'scripts/',
+		'project-restart.sh'  => 'scripts/',
 
 		// Server
-		'adminer.php' 			=> 'vagrant/vendor/',
-		'apache-web-log.php' 	=> 'vagrant/vendor/',
-		'virtualhost.conf' 		=> 'vagrant/config/',
-		'php.ini' 				=> 'vagrant/config/',
-		'phpmyadmin.php' 		=> 'vagrant/config/',
+		'adminer.php'    => 'vagrant/vendor/',
+		'apache-web-log.php'  => 'vagrant/vendor/',
+		'virtualhost.conf'   => 'vagrant/config/',
+		'php.ini'     => 'vagrant/config/',
+		'phpmyadmin.php'   => 'vagrant/config/',
 
 		// Web
-		'index.php'			=> 'web/',
-		'default.sql'			=> 'databases/',
+		'index.php'   => 'web/',
+		'default.sql'   => 'databases/',
 		];
 
 		// Prepare commit json
@@ -34,7 +35,12 @@ class Provision {
 
 		// Apply config to files and include them in commit
 		foreach ( $files as $name => $path ) {
-			$content = base64_encode( file_get_contents( INC_ROOT.'/samples/'.$name ) );
+			if ( $name == 'project-settings.rb' ) {
+				$content = base64_encode($this->getSettings());
+			}
+			else {
+				$content = base64_encode( file_get_contents( INC_ROOT.'/samples/'.$name ) );
+			}
 			$json .= '{
 				"action": "create",
 				"encoding": "base64",
@@ -44,7 +50,7 @@ class Provision {
 		}
 
 		// Clean commit json
-		$json = rtrim($json, ",");
+		$json = rtrim( $json, "," );
 		$json .= ']}';
 
 		return $json;
@@ -52,4 +58,23 @@ class Provision {
 
 	}
 
+	private function getSettings() {
+
+		// prepare settings
+		$settings = 'PROJECTNAME="'.$_GET['projectname'].'"
+		PHPVERSION="'.$_GET['phpver'].'"
+		DATABASE="default.sql"
+		PASSWORD="'.$_GET['password'].'"
+		IPADRESS="'.$_GET['customip'].'"
+		PMAVERSION="'.$_GET['pmaver'].'"
+		TYPE="'.$_GET['projecttype'].'"
+		TIMEZONE="'.$_GET['timezone'].'"
+		';
+
+		// Remove tabs
+		$settings = trim(preg_replace('/\t+/', '', $settings));
+		return $settings;
+	}
+
 }
+
