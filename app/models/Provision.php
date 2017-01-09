@@ -24,11 +24,9 @@ class Provision {
 		'php.ini' 				=> 'vagrant/config/',
 		'phpmyadmin.php' 		=> 'vagrant/config/',
 
-		// Database
-		'default.sql'			=> 'databases/',
-
 		// Web
-		'welcome.html'			=> 'web/',
+		'index.php'			=> 'web/',
+		'default.sql'			=> 'databases/',
 		];
 
 		// Prepare commit json

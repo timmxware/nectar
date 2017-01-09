@@ -21,24 +21,11 @@ export DEBIAN_FRONTEND=noninteractive
 #                                       #
 #***************************************#
 
+# Get project settings
+source /vagrant/vagrant/config/vm/vm-settings.conf
 
-# Get variables defined in Vagrantfile
-ISFIRSTRUN=$1
-PROJECTNAME=$2
-PASSWORD=$3
-IPADRESS=$4
-DATABASE=$5
-PHPVERSION=$6
-PMAVERSION=$7
-TIMEZONE=$8
-
-# Export variables to work with configuration templates
-export PROJECTNAME PASSWORD IPADRESS DATABASE TIMEZONE
-CONFIGVARS='$PROJECTNAME:$PASSWORD:$IPADRESS:$DATABASE:$TIMEZONE'
-
-# Get current directory
-current_dir="$(dirname "$0")"
-
+# Export variables to replace them in config files
+export PROJECTNAME PASSWORD IPADRESS DATABASE PHPVERSION PMAVERSION TIMEZONE
 
 #***************************************#
 #                                       #
@@ -46,15 +33,18 @@ current_dir="$(dirname "$0")"
 #                                       #
 #***************************************#
 
+ISFIRSTRUN=$1
 
 if [ "$ISFIRSTRUN" = "true" ] ; then
 
 # Is executed on first boot
-"$current_dir/vm-install.sh"
+install_script="/vagrant/vagrant/config/vm/vm-install.sh"
+chmod +x "$install_script" && "$install_script" && chmod -x "$install_script"
 
 else
 
 # Is executed every boot
-"$current_dir/vm-configure.sh"
+config_script="/vagrant/vagrant/config/vm/vm-configure.sh"
+chmod +x "$config_script" && "$config_script" && chmod -x "$config_script"
 
 fi

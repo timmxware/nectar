@@ -1,54 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##
-##                                    ##
-##                                    ##
-##   PLEASE DEFINE THESE VARIABLES    ##
-##         BEFORE VAGRANT UP!         ##
-##                                    ##
-##                                    ##
-##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##
-
-
-# Project name defines :
-# -the virtualhost name, accessible from http://project_name.local
-# -the folder name in /var/www
-# -the created mysql database name
-project_name = "mycommunit"
-
-# PHP version ("5" or "7.x")
-# !! This can't be changed once the box is setup !!
-php_version = "5"
-
-# Defines Apache virtualhost base directory
-# Must exist in your working folder root directory
-public_folder = "web"
-
-# sql data loaded into project database
-default_database = "default.sql"
-
-
-##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##
-##                                    ##
-##      ADVANCED CONFIGURATION :      ##
-##     DO NOT CHANGE THE FOLLOWING    ##
-##        UNLESS YOU KNOW WHY!        ##
-##                                    ##
-##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##
-
-
-# Default password for everything that needs one (mysql, phpmyadmin...)
-root_password = "root"
-
-# Project IP address
-ip_address = "192.168.42.18"
-
-# PHPMyAdmin version
-pma_version = "4.6.4"
-
-# Timezone
-time_zone = "Europe/Paris"
+require "./vagrant/config/vm/vm-settings.conf"
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 Vagrant.configure("2") do |config|
@@ -64,7 +17,7 @@ Vagrant.configure("2") do |config|
   end
 
    # mount public_folder as Apache document root with write permissions
-  config.vm.synced_folder "./" , "/var/www/" + project_name + "/", id: "vagrant-web", nfs: true
+  config.vm.synced_folder "./" , "/var/www/" + PROJECTNAME + "/", id: "vagrant-web", nfs: true
 
   # mount databases folder in /home/vagrant/databases
   config.vm.synced_folder "./databases" , "/home/vagrant/databases", id: "phpmyadmin-pma", nfs: true
@@ -75,21 +28,19 @@ Vagrant.configure("2") do |config|
   config.hostmanager.manage_guest = false
 
   # Enable a private network and edit hosts file on host machine
-  config.vm.define project_name do |node|
-    node.vm.hostname = project_name + ".local"
-    #node.hostmanager.aliases = [ "www." + project_name + ".local" ]
-    node.vm.network :private_network, ip: ip_address
-    node.vm.network :forwarded_port,  guest: 1080, host: 1080
+  config.vm.define PROJECTNAME do |node|
+    node.vm.hostname = PROJECTNAME + ".local"
+    #node.hostmanager.aliases = [ "www." + PROJECTNAME + ".local" ]
+    node.vm.network :private_network, ip: IPADRESS
+    node.vm.network :forwarded_port,  guest: 1080, host: 1082
   end
   config.vm.provision :hostmanager
 
   # VM install script (only first boot)
-  config.vm.provision :shell, :path => './vagrant/config/vm/vm-boot.sh', :args =>
-  ["true", project_name, root_password, ip_address, default_database,php_version,pma_version,time_zone]
+  config.vm.provision :shell, :path => './vagrant/config/vm/vm-boot.sh', :args => ["true"]
 
   # VM configure script (every boot)
-  config.vm.provision :shell, :path => './vagrant/config/vm/vm-boot.sh', :args =>
-  ["false", project_name, root_password, ip_address, default_database,php_version,pma_version,time_zone], :run => 'always'
+  config.vm.provision :shell, :path => './vagrant/config/vm/vm-boot.sh', :args => ["false"], :run => 'always'
 
   # Project install script (only first boot)
   config.vm.provision :shell, :path => './scripts/project-install.sh'
@@ -99,31 +50,32 @@ Vagrant.configure("2") do |config|
 
   # Boot message :
   config.vm.post_up_message = "
-    ░░░░░░░░░░░░░░░░░░░░░░░░░░█▄\n
-    ░▄▄▄▄▄▄░░░░░░░░░░░░░▄▄▄▄▄░░█▄\n
-    ░▀▀▀▀▀███▄░░░░░░░▄███▀▀▀▀░░░█▄\n
-    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█\n
-    ░▄▀▀▀▀▀▄░░░░░░░░░░▄▀▀▀▀▀▄░░░░█\n
-    █▄████▄░▀▄░░░░░░▄█░▄████▄▀▄░░█▄\n
-    ████▀▀██░▀▄░░░░▄▀▄██▀█▄▄█░█▄░░█\n
-    ██▀██████░█░░░░█░████▀█▀██░█░░█\n
-    ████▀▄▀█▀░█░░░░█░█████▄██▀▄▀░░█\n
-    ███████▀░█░░░░░░█░█████▀░▄▀░░░█\n
-    ░▀▄▄▄▄▄▀▀░░░░░░░░▀▀▄▄▄▄▀▀░░░░░█\n
-    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█\n
-    ░░▓▓▓▓▓▓▓░░░░░░░░░░▓▓▓▓▓▓▓░░░░█\n
-    ░░░▓▓▓▓▓░░░░░░░░░░░░▓▓▓▓▓░░░░░█\n
-    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█\n
-    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█▀\n
-    ░░░░░░░░░▄▄███████▄▄░░░░░░░░░█\n
-    ░░░░░░░░█████████████░░░░░░░█▀\n
-    ░░░░░░░░░▀█████████▀░░░░░░░█▀\n
-    ░░░░░░░░░░░░░░░░░░░░░░░░░░█▀\n
+    ★★ PROJECT READY ★★
+    ░░░░░░░░░░░░░░░░░░░░░░░░░░█▄
+    ░▄▄▄▄▄▄░░░░░░░░░░░░░▄▄▄▄▄░░█▄
+    ░▀▀▀▀▀███▄░░░░░░░▄███▀▀▀▀░░░█▄
+    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█
+    ░▄▀▀▀▀▀▄░░░░░░░░░░▄▀▀▀▀▀▄░░░░█
+    █▄████▄░▀▄░░░░░░▄█░▄████▄▀▄░░█▄
+    ████▀▀██░▀▄░░░░▄▀▄██▀█▄▄█░█▄░░█
+    ██▀██████░█░░░░█░████▀█▀██░█░░█
+    ████▀▄▀█▀░█░░░░█░█████▄██▀▄▀░░█
+    ███████▀░█░░░░░░█░█████▀░▄▀░░░█
+    ░▀▄▄▄▄▄▀▀░░░░░░░░▀▀▄▄▄▄▀▀░░░░░█
+    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█
+    ░░▓▓▓▓▓▓▓░░░░░░░░░░▓▓▓▓▓▓▓░░░░█
+    ░░░▓▓▓▓▓░░░░░░░░░░░░▓▓▓▓▓░░░░░█
+    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█
+    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█▀
+    ░░░░░░░░░▄▄███████▄▄░░░░░░░░░█
+    ░░░░░░░░█████████████░░░░░░░█▀
+    ░░░░░░░░░▀█████████▀░░░░░░░█▀
+    ░░░░░░░░░░░░░░░░░░░░░░░░░░█▀
     ░░░░░░░░░░░░░░░░░░░░░░░░░█▀\n
-    Projet:       http://"+project_name+".local\n
-    PHPMyAdmin:   http://"+project_name+".local/phpmyadmin\n
-    Adminer:      http://"+project_name+".local/adminer\n
-    MailCatcher:  http://"+project_name+".local:1080\n
-    Apache log:   http://"+project_name+".local/apache\n
+    Projet:       http://"+PROJECTNAME+".local\n
+    PHPMyAdmin:   http://"+PROJECTNAME+".local/phpmyadmin\n
+    Adminer:      http://"+PROJECTNAME+".local/adminer\n
+    MailCatcher:  http://"+PROJECTNAME+".local:1080\n
+    Apache log:   http://"+PROJECTNAME+".local/apache\n
     "
 end

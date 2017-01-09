@@ -66,7 +66,8 @@ sudo apt-get -y install curl unzip
 
 
 # install PHP
-if [ $PHPVERSION = "5" ] ; then
+if [ $PHPVERSION = "5" ]
+then
 sudo apt-get -y install php5 php-pear php5-mcrypt php5-gd php5-curl php-apc
 else
 echo "deb http://packages.dotdeb.org jessie all" | sudo tee /etc/apt/sources.list.d/dotdeb.list
@@ -108,7 +109,7 @@ sudo apt-get -y install mysql-server php"$PHPVERSION"-mysql
 mysql -u root -p"$PASSWORD" -e "CREATE DATABASE ${PROJECTNAME};"
 
 # import selected database
-mysql -u root -p"$PASSWORD" "$PROJECTNAME" < /databases/$DATABASE
+mysql -u root -p"$PASSWORD" "$PROJECTNAME" < /vagrant/databases/$DATABASE
 
 
 #***************************************#
@@ -138,7 +139,7 @@ mysql -u root -p"$PASSWORD" -e "GRANT SELECT, INSERT, DELETE, UPDATE ON phpmyadm
 
 # install Adminer
 sudo mkdir /var/www/adminer
-sudo cp /vagrant/vendor/adminer.php /var/www/adminer/adminer.php
+sudo cp /vagrant/vagrant/vendor/adminer.php /var/www/adminer/adminer.php
 
 
 #***************************************#

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
- <html lang="en">
+ <html lang="fr">
  <head>
  	<meta charset="UTF-8">
  	<title>Hello world</title>
  </head>
  <body>
- 	<h1>Welcome !</h1>
+ 	<?php echo phpinfo(); ?>
  </body>
  </html>
