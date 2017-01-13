@@ -67,9 +67,8 @@ class Token {
 			$_SESSION['refresh_token'] = $refreshToken;
 			return true;
 		}
-		else {
-			return false;
-		}
+		return false;
+
 	}
 
 }

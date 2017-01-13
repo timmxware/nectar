@@ -68,12 +68,12 @@ sudo apt-get -y install curl unzip
 # install PHP
 if [ $PHPVERSION = "5" ]
 then
-sudo apt-get -y install php5 php-pear php5-mcrypt php5-gd php5-curl php-apc
+sudo apt-get -y install php5 php-pear php5-mcrypt php5-gd php5-curl php-apc php5-mysql
 else
 echo "deb http://packages.dotdeb.org jessie all" | sudo tee /etc/apt/sources.list.d/dotdeb.list
 wget -O- https://www.dotdeb.org/dotdeb.gpg | sudo apt-key add -
 sudo apt-get update
-sudo apt-get -y install php7.0 libapache2-mod-php7.0 php7.0-curl php7.0-json php7.0-gd php7.0-mcrypt php7.0-msgpack php7.0-memcached php7.0-intl php7.0-sqlite3 php7.0-gmp php7.0-geoip php7.0-mbstring php7.0-xml php7.0-zip php7.0-imagick
+sudo apt-get -y install php7.0 libapache2-mod-php7.0 php7.0-curl php7.0-mysql php7.0-json php7.0-gd php7.0-mcrypt php7.0-msgpack php7.0-memcached php7.0-intl php7.0-sqlite3 php7.0-gmp php7.0-geoip php7.0-mbstring php7.0-xml php7.0-zip php7.0-imagick
 fi
 
 
@@ -103,7 +103,7 @@ sudo npm install -g less
 # install mysql and give password to installer
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password $PASSWORD"
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $PASSWORD"
-sudo apt-get -y install mysql-server php"$PHPVERSION"-mysql
+sudo apt-get -y install mysql-server
 
 # create mysql database
 mysql -u root -p"$PASSWORD" -e "CREATE DATABASE ${PROJECTNAME};"
