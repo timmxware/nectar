@@ -2,54 +2,28 @@
 
 class Provision {
 
+
 	// Return a JSON containg first commit
 	public function getAll() {
 
-		// Get files and define their path
-		$files = [
-		// VM
-		'Vagrantfile'   => '',
-		'vm-boot.sh'   => 'vagrant/config/vm/',
-		'vm-configure.sh'  => 'vagrant/config/vm/',
-		'vm-install.sh'  => 'vagrant/config/vm/',
-
-		// Project
-		'project-settings.rb'  => 'vagrant/config/',
-		'project-install.sh'  => 'scripts/',
-		'project-restart.sh'  => 'scripts/',
-
-		// Server
-		'adminer.php'    => 'vagrant/vendor/',
-		'apache-web-log.php'  => 'vagrant/vendor/',
-		'virtualhost.conf'   => 'vagrant/config/',
-		'php.ini'     => 'vagrant/config/',
-		'phpmyadmin.php'   => 'vagrant/config/',
-
-		// Web
-		'index.php'   => 'web/',
-		'default.sql'   => 'databases/',
-		];
-
-		// Prepare commit json
+		// Prepare json commit
 		$json = '{"branch_name": "master", "commit_message": "Premier commit", "actions": [';
 
-		// Apply config to files and include them in commit
+		// Get files and their path
+		$files = $this->getSampleFiles();
+
+		// Include each file in commit
 		foreach ( $files as $name => $path ) {
-			if ( $name == 'project-settings.rb' ) {
-				$content = base64_encode($this->getSettings());
-			}
-			else {
-				$content = base64_encode( file_get_contents( INC_ROOT.'/samples/'.$name ) );
-			}
+
 			$json .= '{
 				"action": "create",
 				"encoding": "base64",
 				"file_path": "'.$path.$name.'",
-				"content": "'.$content.'"
+				"content": "'.$this->getFileContent($name).'"
 			},';
 		}
 
-		// Clean commit json
+		// Clean json
 		$json = rtrim( $json, "," );
 		$json .= ']}';
 
@@ -58,9 +32,83 @@ class Provision {
 
 	}
 
-	private function getSettings() {
+	// Return project default files
+	private function getSampleFiles() {
+		$samples = [
+		// VM
+		'Vagrantfile'   		=> '',
+		'vm-boot.sh'   			=> 'vagrant/config/vm/',
+		'vm-configure.sh'  		=> 'vagrant/config/vm/',
+		'vm-install.sh'  		=> 'vagrant/config/vm/',
 
-		// prepare settings
+		// Project
+		'project-settings.rb'  	=> 'vagrant/config/',
+		'project-install.sh' 	=> 'scripts/',
+		'project-restart.sh'  	=> 'scripts/',
+
+		// Server
+		'adminer.php'    		=> 'vagrant/vendor/',
+		'apache-web-log.php'  	=> 'vagrant/vendor/',
+		'virtualhost.conf'   	=> 'vagrant/config/',
+		'php.ini'     			=> 'vagrant/config/',
+		'phpmyadmin.php'   		=> 'vagrant/config/',
+
+		// Web
+		'index.php'   			=> 'web/',
+		'default.sql'   		=> 'databases/',
+
+		// Gitlab
+		'README.md'   			=> '',
+		'.gitlab-ci.yml'   		=> '',
+		];
+
+		return $samples;
+	}
+
+
+	// Get file content
+	private function getFileContent($fileName) {
+
+		// Generate project settings
+		if ( $fileName == 'project-settings.rb' ) {
+			$content = $this->settingsContent();
+		}
+
+		else if ( $fileName == '.gitlab-ci.yml' ) {
+			// Remove the dot in filename
+			$content = file_get_contents( INC_ROOT.'/samples/'.ltrim($fileName, '.') ) ;
+		}
+
+		// Get content from the "samples" directory for every other files
+		else {
+			$content = file_get_contents( INC_ROOT.'/samples/'.$fileName ) ;
+		}
+
+		// Change tokens in README file
+		if ( $fileName == 'README.md' ) {
+			$content = str_replace('%PROJECTNAME%', $_GET['projectname'], $content);
+		}
+
+		// Ecode to base64
+		$content = base64_encode($content);
+
+		// Return content
+		return $content;
+	}
+
+
+	private function gitlabCiContent() {
+
+
+
+
+	}
+
+
+	// Return settings
+	private function settingsContent() {
+
+		// prepare settings from query
 		$settings = 'PROJECTNAME="'.$_GET['projectname'].'"
 		PHPVERSION="'.$_GET['phpver'].'"
 		DATABASE="default.sql"
@@ -77,4 +125,3 @@ class Provision {
 	}
 
 }
-

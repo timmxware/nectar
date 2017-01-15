@@ -141,10 +141,11 @@ sudo gitlab-ctl reconfigure
 
 a2enmod proxy_balancer
 a2enmod headers
+ a2enmod proxy_wstunnel
 
 
  <VirtualHost *:80>
-  ServerName mattermost.gitlab.local
+  ServerName mattermost.gitlab.com
 
   ProxyPreserveHost On
   RewriteEngine     On
@@ -169,10 +170,15 @@ a2enmod headers
   <Location /api/v1/websocket>
      Require all granted
      ProxyPassReverse ws://127.0.0.1:8065/api/v1/websocket
-     ProxyPassReverseCookieDomain 127.0.0.1 mattermost.xxx.org
+     ProxyPassReverseCookieDomain 127.0.0.1 mattermost.gitlab.com
   </Location>
 
   <Location />
+     Require all granted
+     ProxyPassReverse http://127.0.0.1:8065/
+     ProxyPassReverseCookieDomain 127.0.0.1 mattermost.gitlab.com
+  </Location>
+</VirtualHost>
 
 *********** mattermost vhost HTTPS ******************************
 
@@ -238,8 +244,8 @@ CustomLog /var/log/httpd/mattermost.gitlab.com.log combined
 
 ******self signed SSL Vagrant **************
 sudo openssl req -x509 -nodes -days 1972 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
-a2ensite default-ssl
 a2enmod ssl
+a2ensite default-ssl #change with generated key above
 
 
 

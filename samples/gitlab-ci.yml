@@ -1,0 +1,28 @@
+deploy as preview app:
+  stage: deploy
+  except:
+    - master
+  when: manual
+  script: pwd
+  environment:
+    name: Features/$CI_BUILD_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.gitlab.local/
+    on_stop: stop_preview_app
+
+stop_preview_app:
+  stage: deploy
+  when: manual
+  script: echo "good bye"
+  environment:
+    name: Features/$CI_BUILD_REF_NAME
+    action: stop
+
+production app:
+  stage: deploy
+  when: manual
+  script: pwd
+  only:
+    - master
+  environment:
+    name: Master
+    url: http://$CI_ENVIRONMENT_SLUG.gitlab.local/
