@@ -11,6 +11,8 @@ deploy as preview app:
 
 stop_preview_app:
   stage: deploy
+  except:
+    - master
   when: manual
   script: echo "good bye"
   environment:
