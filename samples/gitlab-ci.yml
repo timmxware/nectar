@@ -1,19 +1,24 @@
 deploy as preview app:
-  stage: deploy
+  stage: test
   except:
     - master
   when: manual
-  script: pwd
+  script: echo $CI_PROJECT_DIR
   environment:
     name: Features/$CI_BUILD_REF_NAME
-    url: http://$CI_ENVIRONMENT_SLUG.gitlab.local/
+    url: http://$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.gitlab.local/
     on_stop: stop_preview_app
+  before_script:
+    - mkdir $CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG
+    - cd $CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG
 
 stop_preview_app:
-  stage: deploy
+  stage: test
   except:
     - master
   when: manual
+  variables:
+    GIT_STRATEGY: none
   script: echo "good bye"
   environment:
     name: Features/$CI_BUILD_REF_NAME
@@ -22,9 +27,12 @@ stop_preview_app:
 production app:
   stage: deploy
   when: manual
-  script: pwd
+  script: echo $CI_PROJECT_DIR
   only:
     - master
   environment:
     name: Master
-    url: http://$CI_ENVIRONMENT_SLUG.gitlab.local/
+    url: http://$CI_PROJECT_NAME.gitlab.local/
+  before_script:
+  - mkdir $CI_PROJECT_NAME
+  - cd $CI_PROJECT_NAME
