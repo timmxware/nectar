@@ -37,7 +37,7 @@ class Provision {
 		$samples = [
 		// VM
 		'Vagrantfile'   		=> '',
-		'vm-boot.sh'   			=> 'vagrant/config/vm/',
+		'vm-init.sh'   			=> 'vagrant/config/vm/',
 		'vm-configure.sh'  		=> 'vagrant/config/vm/',
 		'vm-install.sh'  		=> 'vagrant/config/vm/',
 

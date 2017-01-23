@@ -1,38 +1,51 @@
-deploy as preview app:
-  stage: test
-  except:
-    - master
-  when: manual
-  script: echo $CI_PROJECT_DIR
-  environment:
-    name: Features/$CI_BUILD_REF_NAME
-    url: http://$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.gitlab.local/
-    on_stop: stop_preview_app
-  before_script:
-    - mkdir $CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG
-    - cd $CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG
+stages:
+  - review
+  - staging
+#  - production
 
-stop_preview_app:
-  stage: test
+review:
+  stage: review
+  script:
+    - rsync -av --delete * /home/preview/$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG
+  environment:
+    name: Preview/$CI_BUILD_REF_NAME
+    url: http://$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.timmxware.fr/
+    on_stop: stop_review
+  only:
+    - branches
   except:
     - master
-  when: manual
+
+
+stop_review:
+  stage: review
+  script:
+    - rm -rf * /home/preview/$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG
   variables:
     GIT_STRATEGY: none
-  script: echo "good bye"
+  when: manual
   environment:
-    name: Features/$CI_BUILD_REF_NAME
+    name: Preview/$CI_BUILD_REF_NAME
     action: stop
 
-Production:
-  stage: deploy
-  when: manual
-  script: echo $CI_PROJECT_DIR
+staging:
+  stage: staging
+  script:
+    - rsync -av --delete * /home/preview/$CI_PROJECT_NAME
+  environment:
+    name: Préprod
+    url: http://$CI_PROJECT_NAME.timmxware.fr/
   only:
     - master
-  environment:
-    name: Master
-    url: http://$CI_PROJECT_NAME.gitlab.local/
-  before_script:
-  - mkdir $CI_PROJECT_NAME
-  - cd $CI_PROJECT_NAME
+
+
+#production:
+#  stage: production
+#  script:
+#    - rsync -av --delete * /srv/nginx/pages/production
+#  environment:
+#    name: Production
+#    url: http://$CI_PROJECT_NAME.gitlab.local/
+#  when: manual
+#  only:
+#    - master

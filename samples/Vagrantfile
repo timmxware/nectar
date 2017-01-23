@@ -37,10 +37,10 @@ Vagrant.configure("2") do |config|
   config.vm.provision :hostmanager
 
   # VM install script (only first boot)
-  config.vm.provision :shell, :path => './vagrant/config/vm/vm-boot.sh', :args => ["true"]
+  config.vm.provision :shell, :path => './vagrant/config/vm/vm-init.sh', :args => ["true"]
 
   # VM configure script (every boot)
-  config.vm.provision :shell, :path => './vagrant/config/vm/vm-boot.sh', :args => ["false"], :run => 'always'
+  config.vm.provision :shell, :path => './vagrant/config/vm/vm-init.sh', :args => ["false"], :run => 'always'
 
   # Project install script (only first boot)
   config.vm.provision :shell, :path => './scripts/project-install.sh'
