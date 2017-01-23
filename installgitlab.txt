@@ -16,16 +16,22 @@ web_server['external_users'] = ['www-data']
 nginx['enable'] = false
 
 
-
 install apache
+a2enmod virtual_hosts proxy_ proxy_http ssl rewrite vhost_alias headers
+
 
 <VirtualHost *:80>
-  ServerName preview.gitlab.local
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]
+</VirtualHost>
+
+<VirtualHost *:443>
+  ServerName preview.timmxware.fr
   ProxyPreserveHost On
   ServerSignature Off
     RewriteEngine on
  DocumentRoot /opt/gitlab/embedded/service/gitlab-rails/public
-#Alias "/apache" "/var/www/apache"
   <Location />
     Order deny,allow
     Allow from all    Options FollowSymLinks
@@ -33,18 +39,33 @@ install apache
     Require all granted
     ProxyPass http://127.0.0.1:8080/
     ProxyPassReverse http://127.0.0.1:8080
-    ProxyPassReverse http://preview.gitlab.local/
+    ProxyPassReverse http://preview.timmxware.fr/
  </Location>
   RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_FILENAME} !-f
   RewriteRule .* http://127.0.0.1:8080%{REQUEST_URI} [P,QSA]
 </VirtualHost>
 
+<VirtualHost *:443>
+  UseCanonicalName Off
+  ServerName timmxware.fr
+  ServerAlias *.timmxware.fr
 
-<VirtualHost *:80>
+  VirtualDocumentRoot /home/preview/%1/web
+
+  <Directory ~ "/home/preview/*/public">
+    Options Indexes FollowSymlinks MultiViews
+    AllowOverride All
+    Require all granted
+
+  </Directory>
+</VirtualHost>
+
+
+<VirtualHost *:443>
   ServerName nectar.gitlab.local
   RewriteEngine on
- DocumentRoot /home/vagrant/nectar/public
-  <Directory /home/vagrant/nectar/public>
+ DocumentRoot /home/preview/nectar/public
+  <Directory /home/preview/nectar/public>
     Options FollowSymLinks
     AllowOverride All
     Require all granted
@@ -65,18 +86,18 @@ sudo setfacl -Rd -m u:www-data:rwx /home/web/public
 
 
 
-*** Auto vhost ****
+*** Auto vhost GOOD VHOST ****
 
 sudo a2enmod virtual_hosts
 
-UseCanonicalName Off
-<VirtualHost *:80>
-  ServerName gitlab.local
-  ServerAlias *.gitlab.local
+<VirtualHost *:443>
+  UseCanonicalName Off
+  ServerName timmxware.fr
+  ServerAlias *.timmxware.fr
 
-  VirtualDocumentRoot /home/pol/%1/public
+  VirtualDocumentRoot /home/preview/%1/web
 
-  <Directory ~ "/home/pol/.*/public">
+  <Directory ~ "/home/preview/*/public">
     Options Indexes FollowSymlinks MultiViews
     AllowOverride All
     Require all granted
@@ -291,6 +312,11 @@ concurrent = 1
 
 
 
+********* LETS ENCRYPT *************************
+
+certbot-auto certonly -a webroot --agree-tos -w /opt/gitlab/embedded/service/gitlab-rails/public \
+--email g.terras@timmxware.fr \
+--expand -d timmxware.fr,preview.timmxware.fr
 
 
 

@@ -29,7 +29,7 @@ sudo apt-get update
 sudo apt-get -y install apache2
 
 # enable mod_rewrite
-sudo a2enmod rewrite
+sudo a2enmod virtual_hosts proxy_ proxy_http ssl rewrite vhost_alias
 
 # give access to error log
 sudo chmod -R go+rX /var/log/apache2
