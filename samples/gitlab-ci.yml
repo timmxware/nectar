@@ -24,7 +24,7 @@ stop_preview_app:
     name: Features/$CI_BUILD_REF_NAME
     action: stop
 
-production app:
+Production:
   stage: deploy
   when: manual
   script: echo $CI_PROJECT_DIR

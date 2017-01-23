@@ -249,16 +249,56 @@ a2ensite default-ssl #change with generated key above
 
 
 
+***************** gitlab-runner config *******************
+
+michael@Sict ~ $ cat /etc/gitlab-runner/config.toml
+concurrent = 1
+[[runners]]
+  url = "http://192.168.1.240/ci"
+  token = "fb8b064e53e21159e268853af6f8ea"
+  name = "Sict162"
+  limit = 1
+  executor = "ssh"
+  builds_dir = "/Data/git_build"
+  [runners.ssh]
+    user = "root"
+    host = "192.168.1.162"
+    port = "2222"
+    identity_file = "/home/michael/.ssh/id_rsa"
+[[runners]]
+  url = "http://192.168.1.240/ci"
+  token = "18795ba96cfe74478ee63ff7decedd"
+  name = "Sict250"
+  limit = 1
+  executor = "ssh"
+  builds_dir = "/Data/git_build"
+  [runners.ssh]
+    user = "root"
+    host = "192.168.1.250"
+    port = "2222"
+    identity_file = "/home/michael/.ssh/id_rsa"
+[[runners]]
+  url = "http://192.168.1.240/ci"
+  token = "87aa2b2c0f5779d5e01f9d731fb6e4"
+  name = "Sict236"
+  executor = "ssh"
+  builds_dir = "/Data/git_build"
+  [runners.ssh]
+    user = "root"
+    host = "192.168.1.236"
+    port = "2222"
+    identity_file = "/home/michael/.ssh/id_rsa"
+
+
+
+
+
+
+******* PHP *********************
 
 http://requiremind.com/a-most-simple-php-mvc-beginners-tutorial/
 https://www.dev-metal.com/mini-extremely-simple-barebone-php-application/
 
-********** GREENSOCK
-http://codepen.io/MAW/pen/KdmwMb?editors=001
-http://codepen.io/osublake/pen/avbPON?editors=001
-http://pixijs.github.io/pixi-particles-editor/#snow
-http://codepen.io/osublake/pen/f0dc23be2284aa07156244e62ff5dcba/?editors=001
-http://codepen.io/osublake/pen/MyMbRY?editors=0010
-http://codepen.io/SnapToPixels/pen/f62da3152b7cf640633fe734cdd4b184?editors=001
+
 
 
